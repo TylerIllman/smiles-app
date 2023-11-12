@@ -8,7 +8,9 @@ import { SignIn, SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 export default function Home() {
   const user = useUser();
 
-  const { data } = api.posts.getAll.useQuery()
+  const { data } = api.posts.getAll.useQuery();
+
+  console.log("here is data: ", data)
 
   return (
     <>
