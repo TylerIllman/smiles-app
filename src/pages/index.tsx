@@ -10,7 +10,6 @@ export default function Home() {
 
   const { data } = api.posts.getAll.useQuery()
 
-
   return (
     <>
       <Head>
