@@ -15,8 +15,16 @@ import { useState } from "react";
 const CreatePostWizard = () => {
   const { user } = useUser();
 
-  const { mutate } = api.posts.create.useMutation();
+  const ctx = api.useUtils();
+
   const [input, setInput] = useState<string>("");
+
+  const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
+    onSuccess: () => {
+      setInput("");
+      ctx.posts.getAll.invalidate();
+    },
+  });
 
   if (!user) return null;
 
@@ -35,6 +43,7 @@ const CreatePostWizard = () => {
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        disabled={isPosting}
       />
       <button onClick={() => mutate({ content: input })}>Post</button>
     </div>
