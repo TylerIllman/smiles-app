@@ -21,6 +21,8 @@ const CreatePostWizard = () => {
         src={user.imageUrl}
         alt="Profile image"
         className="h-14 w-14 rounded-full"
+        width={56}
+        height={56}
       />
       <input
         placeholder="Type some emojis"
