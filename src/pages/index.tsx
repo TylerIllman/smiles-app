@@ -113,8 +113,7 @@ export default function Home() {
   api.posts.getAll.useQuery();
 
   // Returns empty div if user isn't loaded
-  //prettier-ignore
-  if (!userLoaded) return <div></div>
+  if (!userLoaded) return <div></div>;
 
   return (
     <>
