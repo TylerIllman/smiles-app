@@ -34,9 +34,9 @@ import { getAuth} from '@clerk/nextjs/server';
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+export const createTRPCContext = (opts: CreateNextContextOptions) => {
 
-  const user = await getAuth(opts.req).userId
+  const user = getAuth(opts.req).userId
 
   return {
     db,
