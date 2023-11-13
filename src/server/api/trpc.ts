@@ -14,9 +14,7 @@ import { TRPCError } from "@trpc/server";
 
 import { db } from "~/server/db";
 
-import * as trpc from '@trpc/server';
-import * as trpcNext from '@trpc/server/adapters/next';
-import { getAuth, SignedInAuthObject, SignedOutAuthObject } from '@clerk/nextjs/server';
+import { getAuth} from '@clerk/nextjs/server';
 
 
 /**
