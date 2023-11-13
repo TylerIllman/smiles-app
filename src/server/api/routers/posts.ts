@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, privateProcedure, publicProcedure } from "../trpc";
 import { clerkClient } from "@clerk/nextjs";
 import type { User } from "@clerk/nextjs/server";
 import { TRPCError } from "@trpc/server";
@@ -40,9 +40,30 @@ export const postsRouter = createTRPCRouter({
                 author: {
                     ...author,
                     username: author.username,
-                }
+                },
             };
+        });
+    }),
+
+    create: privateProcedure
+        .input(
+            z.object({
+                content: z.string().emoji().min(1).max(255),
+            })
+        )
+        .mutation(async ({ ctx, input }) => {
+        const authorId = ctx.currentUser;
+
+        const post = await ctx.db.post.create({
+            data: {
+                authorId,
+                content: input.content,
+            }
         })
-    })
+
+        return post;
+
+    }),
+
 });
 
