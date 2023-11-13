@@ -10,7 +10,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ClerkProvider>
       <Toaster position="bottom-center" />
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </ClerkProvider>
   );
 };

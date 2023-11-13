@@ -9,7 +9,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
 import Image from "next/image";
-import { LoadingPage } from "~/components/loading";
+import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 
 import toast from "react-hot-toast";
@@ -55,7 +55,12 @@ const CreatePostWizard = () => {
         onChange={(e) => setInput(e.target.value)}
         disabled={isPosting}
       />
-      <button onClick={() => mutate({ content: input })}>Post</button>
+      {input !== "" && !isPosting && (
+        <button onClick={() => mutate({ content: input })} disabled={isPosting}>
+          Post
+        </button>
+      )}
+      {isPosting && <LoadingSpinner size={20} className="align-middle" />}
     </div>
   );
 };
@@ -108,7 +113,8 @@ export default function Home() {
   api.posts.getAll.useQuery();
 
   // Returns empty div if user isn't loaded
-  if (!userLoaded) return <div></div>;
+  //prettier-ignore
+  if (!userLoaded) return <div></div>
 
   return (
     <>
