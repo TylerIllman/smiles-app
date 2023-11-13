@@ -25,7 +25,7 @@ import { getAuth} from '@clerk/nextjs/server';
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
 
-type CreateContextOptions = Record<string, never>;
+// type CreateContextOptions = Record<string, never>;
 
 
 /**
@@ -36,7 +36,7 @@ type CreateContextOptions = Record<string, never>;
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
 
-  const user = getAuth(opts.req).userId
+  const user = await getAuth(opts.req).userId
 
   return {
     db,
