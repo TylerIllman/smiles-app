@@ -5,7 +5,7 @@ import { authMiddleware } from "@clerk/nextjs";
 // See https://clerk.com/docs/references/nextjs/auth-middleware for more information about configuring your Middleware
 export default authMiddleware({
     // "/" and all tRPC (/api) domains will be accessible to all users
-    publicRoutes: ["/", "/api/(.*)"]
+    publicRoutes: ["/(.*)", "/api/(.*)"]
   }); 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],

@@ -2,7 +2,13 @@ import Head from "next/head";
 
 import type { RouterOutputs } from "~/utils/api";
 import { api } from "~/utils/api";
-import { SignInButton, SignOutButton, auth, useUser } from "@clerk/nextjs";
+import {
+  SignInButton,
+  SignOutButton,
+  UserButton,
+  auth,
+  useUser,
+} from "@clerk/nextjs";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -21,9 +27,9 @@ import { PostView } from "~/components/postview";
 const CreatePostWizard = () => {
   const { user } = useUser();
 
-  const ctx = api.useUtils();
+  const [input, setInput] = useState("");
 
-  const [input, setInput] = useState<string>("");
+  const ctx = api.useContext();
 
   const { mutate, isLoading: isPosting } = api.posts.create.useMutation({
     onSuccess: () => {
@@ -31,11 +37,11 @@ const CreatePostWizard = () => {
       void ctx.posts.getAll.invalidate();
     },
     onError: (e) => {
-      const errorMessage = e?.data?.zodError?.fieldErrors?.content;
-      if (errorMessage?.[0]) {
+      const errorMessage = e.data?.zodError?.fieldErrors.content;
+      if (errorMessage && errorMessage[0]) {
         toast.error(errorMessage[0]);
       } else {
-        toast.error("Failed to post. Please try again later.");
+        toast.error("Failed to post! Please try again later.");
       }
     },
   });
@@ -44,22 +50,22 @@ const CreatePostWizard = () => {
 
   return (
     <div className="flex w-full gap-3">
-      <Link href={`/@${user.username}`}>
-        <Image
-          src={user.imageUrl}
-          alt="Profile image"
-          className="h-14 w-14 rounded-full"
-          width={56}
-          height={56}
-        />
-      </Link>
+      <UserButton
+        appearance={{
+          elements: {
+            userButtonAvatarBox: {
+              width: 56,
+              height: 56,
+            },
+          },
+        }}
+      />
       <input
-        placeholder="Type some emojis"
+        placeholder="Type some emojis!"
         className="grow bg-transparent outline-none"
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        disabled={isPosting}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
@@ -68,18 +74,17 @@ const CreatePostWizard = () => {
             }
           }
         }}
+        disabled={isPosting}
       />
       {input !== "" && !isPosting && (
-        <button onClick={() => mutate({ content: input })} disabled={isPosting}>
-          Post
-        </button>
+        <button onClick={() => mutate({ content: input })}>Post</button>
       )}
       {isPosting && (
         <div className="flex items-center justify-center">
           <LoadingSpinner size={20} />
         </div>
       )}
-      <SignOutButton />
+      <SignOutButton className="grow-0 rounded-md bg-white px-4 py-2 text-black" />
     </div>
   );
 };
@@ -87,12 +92,17 @@ const CreatePostWizard = () => {
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
 
-  if (postsLoading) return <LoadingPage />;
+  if (postsLoading)
+    return (
+      <div className="flex grow">
+        <LoadingPage />
+      </div>
+    );
 
   if (!data) return <div>Something went wrong</div>;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex grow flex-col overflow-y-scroll">
       {data?.map((fullPost) => (
         <PostView {...fullPost} key={fullPost.post.id} />
       ))}
@@ -114,8 +124,11 @@ export default function Home() {
       <PageLayout>
         <div className="flex border-b border-slate-400 p-4">
           {!isSignedIn && (
-            <div className="flex justify-center">
-              <SignInButton />
+            <div className="flex w-full justify-between">
+              <Link href={"/"}>
+                <h1 className="text-3xl font-bold">😋 Smileys</h1>
+              </Link>
+              <SignInButton className="rounded-md bg-white px-4 py-2 text-black" />
             </div>
           )}
           {isSignedIn && <CreatePostWizard />}

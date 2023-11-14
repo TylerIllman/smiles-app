@@ -47,7 +47,7 @@ const ProfilePage: PageProps = ({ username }) => {
       <PageLayout>
         <div className="relative h-36 bg-slate-600">
           <Image
-            src="https://source.unsplash.com/random"
+            src="https://source.unsplash.com/random/?landscapes,urban"
             alt="Random profile banner"
             layout="fill"
             objectFit="cover"
