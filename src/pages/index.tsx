@@ -1,12 +1,8 @@
-import Head from "next/head";
-
-import type { RouterOutputs } from "~/utils/api";
 import { api } from "~/utils/api";
 import {
   SignInButton,
   SignOutButton,
   UserButton,
-  auth,
   useUser,
 } from "@clerk/nextjs";
 
@@ -14,7 +10,6 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 
-import Image from "next/image";
 import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { useState } from "react";
 
@@ -23,6 +18,11 @@ import Link from "next/link";
 
 import { PageLayout } from "~/components/layout";
 import { PostView } from "~/components/postview";
+
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+
+library.add(faPaperPlane);
 
 const CreatePostWizard = () => {
   const { user } = useUser();
@@ -49,7 +49,7 @@ const CreatePostWizard = () => {
   if (!user) return null;
 
   return (
-    <div className="flex w-full gap-3">
+    <div className="flex w-full items-center gap-3">
       <UserButton
         appearance={{
           elements: {
@@ -77,14 +77,19 @@ const CreatePostWizard = () => {
         disabled={isPosting}
       />
       {input !== "" && !isPosting && (
-        <button onClick={() => mutate({ content: input })}>Post</button>
+        <button
+          onClick={() => mutate({ content: input })}
+          className="rounded-md bg-slate-50 px-3 py-2 text-slate-950 hover:bg-slate-200"
+        >
+          <i className="fas fa-paper-plane"></i>
+        </button>
       )}
       {isPosting && (
         <div className="flex items-center justify-center">
           <LoadingSpinner size={20} />
         </div>
       )}
-      <SignOutButton className="grow-0 rounded-md bg-white px-4 py-2 text-black" />
+      <SignOutButton className=" rounded-md bg-slate-50 px-4 py-2 text-slate-950 hover:bg-slate-200" />
     </div>
   );
 };
@@ -128,7 +133,7 @@ export default function Home() {
               <Link href={"/"}>
                 <h1 className="text-3xl font-bold">😋 Smileys</h1>
               </Link>
-              <SignInButton className="rounded-md bg-white px-4 py-2 text-black" />
+              <SignInButton className="rounded-md bg-slate-50 px-4 py-2 text-slate-950 hover:bg-slate-200" />
             </div>
           )}
           {isSignedIn && <CreatePostWizard />}
