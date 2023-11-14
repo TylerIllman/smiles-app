@@ -1,21 +1,14 @@
 import Head from "next/head";
-
 import { api } from "~/utils/api";
-
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { LoadingPage, LoadingSpinner } from "~/components/loading";
+import { LoadingPage } from "~/components/loading";
 dayjs.extend(relativeTime);
-
-import { createServerSideHelpers } from "@trpc/react-query/server";
-import { appRouter } from "~/server/api/root";
-import { db } from "~/server/db";
-import superjson from "superjson";
 import type { GetStaticProps, NextPage } from "next";
 import { PageLayout } from "~/components/layout";
 import Image from "next/image";
 import { PostView } from "~/components/postview";
-import PageLoader from "next/dist/client/page-loader";
+import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 
 const ProfileFeed = (props: { userId: string }) => {
   const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
@@ -75,11 +68,7 @@ const ProfilePage: PageProps = ({ username }) => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const helpers = createServerSideHelpers({
-    router: appRouter,
-    ctx: { db, currentUser: null },
-    transformer: superjson,
-  });
+  const helpers = generateSSGHelper();
 
   const slug = context.params?.slug;
   if (typeof slug !== "string") throw new Error("no slug");
