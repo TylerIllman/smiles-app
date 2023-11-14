@@ -19,11 +19,6 @@ import Link from "next/link";
 import { PageLayout } from "~/components/layout";
 import { PostView } from "~/components/postview";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-
-library.add(faPaperPlane);
-
 const CreatePostWizard = () => {
   const { user } = useUser();
 
@@ -89,7 +84,6 @@ const CreatePostWizard = () => {
           <LoadingSpinner size={20} />
         </div>
       )}
-      <SignOutButton className=" rounded-md bg-slate-50 px-4 py-2 text-slate-950 hover:bg-slate-200" />
     </div>
   );
 };

@@ -62,9 +62,9 @@ const ProfilePage: PageProps = ({ username }) => {
           />
         </div>
         <div className="h-[64px]"></div>
-        <div className="border-b border-slate-400 p-4 text-2xl font-bold">{`@${
-          data.username ?? ""
-        }`}</div>
+        <div className="border-b border-slate-400 p-4 text-2xl font-bold">
+          {`@${data.username ?? ""}`}{" "}
+        </div>
         <div className="w-full">
           <ProfileFeed userId={data.id} />
         </div>

@@ -4,7 +4,7 @@ import { createTRPCRouter, publicProcedure} from "../trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
-
+import { SignOutButton } from "@clerk/nextjs";
 
 
 export const profileRouter = createTRPCRouter({
