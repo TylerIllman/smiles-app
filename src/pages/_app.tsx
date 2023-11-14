@@ -11,7 +11,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <ClerkProvider>
       <Head>
-        <title>Smiles</title>
+        <title>Smileys</title>
         <meta name="description" content="🤪" />
         <link rel="icon" href="/favicon.ico" />
         <link

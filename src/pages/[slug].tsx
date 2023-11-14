@@ -43,7 +43,6 @@ const ProfilePage: PageProps = ({ username }) => {
       <Head>
         <title>{data.username}</title>
         <meta name="description" content={`${data.username}'s account`} />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageLayout>
         <div className="relative h-36 bg-slate-600">
