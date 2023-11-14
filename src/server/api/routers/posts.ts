@@ -49,6 +49,21 @@ export const postsRouter = createTRPCRouter({
         });
     }),
 
+    getPostsByUserId: publicProcedure
+        .input(z.object({
+            userId: z.string(),
+        })).query(({ctx, input}) => 
+            ctx.db.post.findMany ({
+                where: {
+                    authorId: input.userId,
+                },
+                take: 100,
+                orderBy: [{createdAt: "desc"}],
+            })
+        ),
+
+        
+
     create: privateProcedure
         .input(
             z.object({

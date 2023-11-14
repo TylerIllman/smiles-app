@@ -4,7 +4,7 @@ import { api } from "~/utils/api";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { LoadingSpinner } from "~/components/loading";
+import { LoadingPage, LoadingSpinner } from "~/components/loading";
 dayjs.extend(relativeTime);
 
 import { createServerSideHelpers } from "@trpc/react-query/server";
@@ -15,6 +15,18 @@ import superjson from "superjson";
 import type { GetStaticProps, NextPage } from "next";
 import { PageLayout } from "~/components/layout";
 import Image from "next/image";
+
+const ProfileFeed = (props: { userId: string }) => {
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
+    userId: props.userId,
+  });
+
+  if (isLoading) return <LoadingPage />;
+
+  if (!data || data.length === 0) return <div>User has not posted</div>;
+
+  return <div className="flex flex-col"></div>;
+};
 
 type PageProps = NextPage<{ username: string }>;
 const ProfilePage: PageProps = ({ username }) => {
