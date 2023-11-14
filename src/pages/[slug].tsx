@@ -42,10 +42,17 @@ const ProfilePage: PageProps = ({ username }) => {
     <>
       <Head>
         <title>{data.username}</title>
-        <meta name="description" content={`${data.username}'s account`} />
+        <meta name="description" content={`@${data.username}'s account`} />
       </Head>
       <PageLayout>
         <div className="relative h-36 bg-slate-600">
+          <Image
+            src="https://source.unsplash.com/random"
+            alt="Random profile banner"
+            layout="fill"
+            objectFit="cover"
+            quality={100}
+          />
           <Image
             src={data.profileImageUrl}
             alt={`${data.username ?? ""}'s profile picture`}
