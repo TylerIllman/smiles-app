@@ -5,6 +5,7 @@ import { TRPCError } from "@trpc/server";
 import { Ratelimit } from "@upstash/ratelimit"; // for deno: see above
 import { Redis } from "@upstash/redis"; // see below for cloudflare and fastly adapters
 import { filterUserForClient } from "~/server/helpers/filterUserForClient";
+import type { Post } from "@prisma/client";
 
 // Create a new ratelimiter, that allows 3 requests per 1 minute
 const ratelimit = new Ratelimit({
@@ -14,6 +15,29 @@ const ratelimit = new Ratelimit({
     prefix: "@upstash/ratelimit",
   });
 
+
+const addUserDataToPosts = async (posts: Post[]) => {
+    const users = (
+        await clerkClient.users.getUserList({
+            userId: posts.map((post) => post.authorId),
+            limit: 100,
+        })
+    ).map(filterUserForClient)
+
+    return posts.map((post) => {
+        const author = users.find((user) => user.id === post.authorId);
+
+        if (!author?.username) throw new TRPCError({code: "INTERNAL_SERVER_ERROR", message: "Author for post not found"});
+
+        return {
+            post, 
+            author: {
+                ...author,
+                username: author.username,
+            },
+        };
+    });
+}
 
 export const postsRouter = createTRPCRouter({
     getAll: publicProcedure
@@ -25,28 +49,7 @@ export const postsRouter = createTRPCRouter({
             ],
         });
 
-        const users = (
-            await clerkClient.users.getUserList({
-                userId: posts.map((post) => post.authorId),
-                limit: 100,
-            })
-        ).map(filterUserForClient)
-
-        console.log(users)
-
-        return posts.map((post) => {
-            const author = users.find((user) => user.id === post.authorId);
-
-            if (!author?.username) throw new TRPCError({code: "INTERNAL_SERVER_ERROR", message: "Author for post not found"});
-
-            return {
-                post, 
-                author: {
-                    ...author,
-                    username: author.username,
-                },
-            };
-        });
+        return addUserDataToPosts(posts)
     }),
 
     getPostsByUserId: publicProcedure
@@ -60,6 +63,7 @@ export const postsRouter = createTRPCRouter({
                 take: 100,
                 orderBy: [{createdAt: "desc"}],
             })
+            .then(addUserDataToPosts)
         ),
 
         
