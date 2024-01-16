@@ -16,6 +16,7 @@ At the core of Smileys is the homepage, which presents a live feed of emoji post
 <p align="center">
   <img src="https://skillicons.dev/icons?i=nextjs,planetscale,tailwind,react,typescript,prisma" />
   <img src="https://trpc.io/img/logo.svg" width="48px" height="48px" />
+   <img src="https://cdn.sanity.io/images/o0o2tn5x/production/2399b991025c365aafaa6fca85d91deac801e654-1046x1046.png" width="48px" height="48px" />
 </p>
 
 Smileys utilises a modern tech stack and infrastructure including: Next.js, Planetscale, Tailwind, React, Typescript, Prisma and TRPC.
